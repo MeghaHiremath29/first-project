@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Flashcard Quiz App</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f6ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: #fff;
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.flashcard {
+    margin: 20px 0;
+    font-size: 18px;
+    min-height: 60px;
+}
+
+button {
+    padding: 8px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.nav-btn { background: #4caf50; color: white; }
+.action-btn { background: #2196f3; color: white; }
+.delete-btn { background: #f44336; color: white; }
+
+input {
+    width: 90%;
+    padding: 6px;
+    margin: 5px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Flashcard Quiz App</h2>
+
+    <div class="flashcard" id="cardText"></div>
+
+    <button class="action-btn" onclick="showAnswer()">Show Answer</button><br>
+
+    <button class="nav-btn" onclick="prevCard()">Previous</button>
+    <button class="nav-btn" onclick="nextCard()">Next</button>
+
+    <hr>
+
+    <h3>Add / Edit Flashcard</h3>
+    <input type="text" id="question" placeholder="Enter Question">
+    <input type="text" id="answer" placeholder="Enter Answer"><br>
+
+    <button class="action-btn" onclick="addCard()">Add</button>
+    <button class="action-btn" onclick="editCard()">Edit</button>
+    <button class="delete-btn" onclick="deleteCard()">Delete</button>
+</div>
+
+<script>
+let flashcards = [
+    { q: "What is HTML?", a: "HTML stands for HyperText Markup Language." },
+    { q: "What is CSS?", a: "CSS styles web pages." },
+    { q: "What is JavaScript?", a: "JavaScript adds interactivity." }
+];
+
+let index = 0;
+let showAns = false;
+
+function displayCard() {
+    showAns = false;
+    cardText.innerText = flashcards[index].q;
+}
+
+function showAnswer() {
+    showAns = !showAns;
+    cardText.innerText = showAns ? flashcards[index].a : flashcards[index].q;
+}
+
+function nextCard() {
+    index = (index + 1) % flashcards.length;
+    displayCard();
+}
+
+function prevCard() {
+    index = (index - 1 + flashcards.length) % flashcards.length;
+    displayCard();
+}
+
+function addCard() {
+    let q = question.value;
+    let a = answer.value;
+    if (q && a) {
+        flashcards.push({ q, a });
+        index = flashcards.length - 1;
+        displayCard();
+        question.value = "";
+        answer.value = "";
+    }
+}
+
+function editCard() {
+    if (flashcards.length > 0) {
+        flashcards[index].q = question.value || flashcards[index].q;
+        flashcards[index].a = answer.value || flashcards[index].a;
+        displayCard();
+    }
+}
+
+function deleteCard() {
+    if (flashcards.length > 1) {
+        flashcards.splice(index, 1);
+        index = 0;
+        displayCard();
+    } else {
+        alert("At least one flashcard is required!");
+    }
+}
+
+displayCard();
+</script>
+
+</body>
+</html>
